@@ -3,9 +3,9 @@ package syrSudokuBackend
 type PuzzleState [9][9]uint8
 
 type Puzzle struct {
-	UUID     string
-	UserID   string
-	Solution PuzzleState
+	UUID     string      `json:"puzzleId"`
+	UserID   string      `json:"userId"`
+	Solution PuzzleState `json:"solution,omitempty"`
 }
 
 type PuzzleService interface {

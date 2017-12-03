@@ -23,7 +23,10 @@
 
 [[constraint]]
   name = "github.com/gin-gonic/gin"
-  version = "1.2.0"
+  branch = "master"
+  # Pulling from master to fetch fix for https://github.com/gin-gonic/gin/issues/1025
+  # They have yet to make a release with this fix.
+  #version = "1.2.0"
 
 [[metadata.heroku]]
   root-package = "github.com/ryanbmilbourne/syr-sudoku-backend"
@@ -43,3 +46,7 @@
 [[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/go-opencv/go-opencv"

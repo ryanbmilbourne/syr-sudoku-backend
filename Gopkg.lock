@@ -8,16 +8,28 @@
   revision = "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
 
 [[projects]]
+  branch = "master"
   name = "github.com/gin-gonic/gin"
-  packages = [".","binding","render"]
-  revision = "d459835d2b077e44f7c9b453505ee29881d5d12d"
-  version = "v1.2"
+  packages = [".","binding","json","render"]
+  revision = "9e895470ddd40a45f28dbe4e96bfb5e893d54f9e"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/go-opencv/go-opencv"
+  packages = ["opencv"]
+  revision = "fb0a687051c795176e0698f358231f2ab1585bcb"
 
 [[projects]]
   branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
+
+[[projects]]
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  revision = "f7279a603edee96fe7764d3de9c6ff8cf9970994"
+  version = "1.0.4"
 
 [[projects]]
   branch = "master"
@@ -76,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "67dc0b428ef29e8c344327483b80ebd62abe7f2e6171482e79ac2379964ccb03"
+  inputs-digest = "d55300e6af529a938e4b8d96e8be48370b0f0d2483d643bbbbcabd94c5497393"
   solver-name = "gps-cdcl"
   solver-version = 1
