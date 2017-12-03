@@ -24,3 +24,10 @@
 [[constraint]]
   name = "github.com/gin-gonic/gin"
   version = "1.2.0"
+
+[[metadata.heroku]]
+  root-package = "github.com/ryanbmilbourne/syr-sudoku-backend"
+  go-version = "go1.9.2"
+  install = [ "./cmd/..." ]
+  ensure = true
+  
