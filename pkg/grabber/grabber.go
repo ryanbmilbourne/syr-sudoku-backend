@@ -25,7 +25,11 @@ func GrabPuzzle(fileName string) (app.PuzzleState, error) {
 	blurredImg := baseImg.Clone()
 	defer blurredImg.Release()
 
+	// Found after some experimentation with the blur level.
+	// More on gaussian kernels here:
+	// https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur
 	kernelSize := 11
+
 	sigma := float64(0.3)*float64(float64(kernelSize-1)*float64(0.5)-1) + float64(0.8)
 	opencv.Smooth(baseImg, blurredImg, opencv.CV_GAUSSIAN, kernelSize, kernelSize, sigma, 0)
 	fmt.Println("SO BLURRY")
@@ -34,7 +38,22 @@ func GrabPuzzle(fileName string) (app.PuzzleState, error) {
 	opencv.SaveImage(fileName+"-blurred.jpg", blurredImg, nil)
 	fmt.Println("WE GOT IT FOREVUH")
 
-	// Now that it's blurred, do the needful.
+	// Now that it's blurred, threshold the document.
+	// This will turn the image into ultra high contrast, which will aid in detecting the grid lines.
+	threshedImg := blurredImg.Clone()
+	opencv.AdaptiveThreshold(
+		blurredImg,
+		threshedImg,
+		255,
+		opencv.CV_ADAPTIVE_THRESH_MEAN_C,
+		opencv.CV_THRESH_BINARY,
+		5, // Calculate the mean over a 5x5 window
+		2, // Subtract 2 from the calculated mean
+	)
+
+	fmt.Println("SAVE THE THRESH")
+	opencv.SaveImage(fileName+"-thresh.jpg", threshedImg, nil)
+	fmt.Println("WE GOT IT FOREVUH")
 
 	return app.PuzzleState{}, nil
 }
