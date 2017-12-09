@@ -2,14 +2,17 @@ package main
 
 import (
 	"database/sql"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	app "github.com/ryanbmilbourne/syr-sudoku-backend/pkg"
+	"github.com/ryanbmilbourne/syr-sudoku-backend/pkg/grabber"
 	"github.com/ryanbmilbourne/syr-sudoku-backend/pkg/postgres"
 
-	log "github.com/sirupsen/logrus"
 	"os"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -36,17 +39,25 @@ func CreatePuzzle(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.JSON(500, gin.H{
-			"error": "Could load load image:" + err.Error(),
+			"error": "Could not load image: " + err.Error(),
 		})
 		return
 	}
-	file.Filename = "/tmp/" + puzzle.UserID + "_" + time.Now().Format(time.RFC3339)
+	file.Filename = "/tmp/suduuku/" + puzzle.UserID + "_" + time.Now().Format(time.RFC3339)
 	c.SaveUploadedFile(file, file.Filename)
 	log.WithFields(log.Fields{
 		"Filename": file.Filename,
 	}).Info("Rx file upload")
 
-	c.JSON(201, puzzle)
+	puzzState, err := grabber.GrabPuzzle(file.Filename)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "Could not preprocess image: " + err.Error(),
+		})
+		return
+	}
+
+	c.JSON(201, puzzState)
 }
 
 func main() {
