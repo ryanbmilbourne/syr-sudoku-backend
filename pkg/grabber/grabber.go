@@ -40,6 +40,7 @@ func GrabPuzzle(fileName string) (app.PuzzleState, error) {
 
 	// Now that it's blurred, threshold the document.
 	// This will turn the image into ultra high contrast, which will aid in detecting the grid lines.
+	fmt.Println("THRESH IT, THRESH IT REAL GUD")
 	threshedImg := blurredImg.Clone()
 	opencv.AdaptiveThreshold(
 		blurredImg,
@@ -50,6 +51,28 @@ func GrabPuzzle(fileName string) (app.PuzzleState, error) {
 		5, // Calculate the mean over a 5x5 window
 		2, // Subtract 2 from the calculated mean
 	)
+
+	// Invert the image.  This will make the numbers and gridline white, on a black background.
+	opencv.Not(threshedImg, threshedImg)
+
+	// Dilate.  This is to amplify any lines that may be been broken by the thresholding.
+
+	// create the structuring element:
+	//sWidth := threshedImg.Width()
+	//sHeight := threshedImg.Height()
+	//dilateKernel := opencv.CreateStructuringElement(
+	//	sWidth,                // cols
+	//	sHeight,               // rows
+	//	sWidth/2,              // anchor_x
+	//	sHeight/2,             // anchor_y
+	//	opencv.CV_MORPH_CROSS, // shape
+	//)
+
+	// Defaut is a 3x3 Cross
+	var dilateKernel *opencv.IplConvKernel
+	opencv.Dilate(threshedImg, threshedImg, dilateKernel, 1)
+
+	fmt.Println("WE THRESHIN'")
 
 	fmt.Println("SAVE THE THRESH")
 	opencv.SaveImage(fileName+"-thresh.jpg", threshedImg, nil)
