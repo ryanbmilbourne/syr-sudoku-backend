@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -49,13 +50,22 @@ func CreatePuzzle(c *gin.Context) {
 		"Filename": file.Filename,
 	}).Info("Rx file upload")
 
+	startParseTime := time.Now()
 	puzzState, err := grabber.GrabPuzzle(file.Filename)
+	totalParseTime := time.Since(startParseTime)
+	log.WithFields(log.Fields{
+		"timeElapsed": totalParseTime,
+	}).Info("Parsed puzzle")
+
 	if err != nil {
 		c.JSON(500, gin.H{
 			"error": "Could not preprocess image: " + err.Error(),
 		})
+		log.WithError(err)
 		return
 	}
+
+	fmt.Printf(puzzState.String())
 
 	c.JSON(201, puzzState)
 }

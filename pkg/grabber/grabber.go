@@ -1,82 +1,39 @@
 package grabber
 
 import (
-	"fmt"
+	"errors"
 
-	opencv "github.com/go-opencv/go-opencv/opencv"
+	"github.com/jamesandersen/go-sudoku/sudokuparser"
 	app "github.com/ryanbmilbourne/syr-sudoku-backend/pkg"
 )
 
 // GrabPuzzle parses a puzzle structure from a provided image
 func GrabPuzzle(fileName string) (app.PuzzleState, error) {
+	parsed, _ := sudokuparser.ParseSudokuFromFile(fileName)
+	state := app.PuzzleState{}
 
-	// Load the image.
-	fmt.Println("LOADING THE FUCKING IMAGE")
-	baseImg := opencv.LoadImage(fileName, 0)
-	if baseImg == nil {
-		return app.PuzzleState{}, fmt.Errorf("Opencv: Failed to load image: %v", fileName)
+	if parsed == "" {
+		return state, errors.New("Unable to parse puzzle")
 	}
-	defer baseImg.Release()
-	fmt.Println("LOADED THE FUCKING IMAGE")
 
-	// Some pre-processing.
-	// Gaussian blur the original image very slightly.  This removes some noise.
-	fmt.Println("BLUR THAT SHIT")
-	blurredImg := baseImg.Clone()
-	defer blurredImg.Release()
+	outerIdx := 0
+	innerIdx := 0
+	for i, val := range parsed {
+		if (i != 0) && (i%9 == 0) {
+			// New row!
+			outerIdx++
+			innerIdx = 0
+		}
 
-	// Found after some experimentation with the blur level.
-	// More on gaussian kernels here:
-	// https://docs.opencv.org/2.4/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur
-	kernelSize := 11
-
-	sigma := float64(0.3)*float64(float64(kernelSize-1)*float64(0.5)-1) + float64(0.8)
-	opencv.Smooth(baseImg, blurredImg, opencv.CV_GAUSSIAN, kernelSize, kernelSize, sigma, 0)
-	fmt.Println("SO BLURRY")
-
-	fmt.Println("SAVE THE BLUR")
-	opencv.SaveImage(fileName+"-blurred.jpg", blurredImg, nil)
-	fmt.Println("WE GOT IT FOREVUH")
-
-	// Now that it's blurred, threshold the document.
-	// This will turn the image into ultra high contrast, which will aid in detecting the grid lines.
-	fmt.Println("THRESH IT, THRESH IT REAL GUD")
-	threshedImg := blurredImg.Clone()
-	opencv.AdaptiveThreshold(
-		blurredImg,
-		threshedImg,
-		255,
-		opencv.CV_ADAPTIVE_THRESH_MEAN_C,
-		opencv.CV_THRESH_BINARY,
-		5, // Calculate the mean over a 5x5 window
-		2, // Subtract 2 from the calculated mean
-	)
-
-	// Invert the image.  This will make the numbers and gridline white, on a black background.
-	opencv.Not(threshedImg, threshedImg)
-
-	// Dilate.  This is to amplify any lines that may be been broken by the thresholding.
-
-	// create the structuring element:
-	//sWidth := threshedImg.Width()
-	//sHeight := threshedImg.Height()
-	//dilateKernel := opencv.CreateStructuringElement(
-	//	sWidth,                // cols
-	//	sHeight,               // rows
-	//	sWidth/2,              // anchor_x
-	//	sHeight/2,             // anchor_y
-	//	opencv.CV_MORPH_CROSS, // shape
-	//)
-
-	// Defaut is a 3x3 Cross
-	var dilateKernel *opencv.IplConvKernel
-	opencv.Dilate(threshedImg, threshedImg, dilateKernel, 1)
-
-	fmt.Println("WE THRESHIN'")
-
-	fmt.Println("SAVE THE THRESH")
-	opencv.SaveImage(fileName+"-thresh.jpg", threshedImg, nil)
-	fmt.Println("WE GOT IT FOREVUH")
-
-	return app.PuzzleState{}, nil
+		if val == '.' {
+			// Value is either unknown or empty
+			state[outerIdx][innerIdx] = 0
+		} else {
+			// The cast here takes the ASCII value of the rune, so subtract
+			// the value of ASCI 0 to get the true int value.
+			state[outerIdx][innerIdx] = uint8(val - '0')
+		}
+		innerIdx++
+	}
+	return state, nil
 }
