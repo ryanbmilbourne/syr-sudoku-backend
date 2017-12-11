@@ -11,7 +11,7 @@ import (
 // GrabPuzzle parses a puzzle structure from a provided image
 func GrabPuzzle(bytes []byte) (app.PuzzleState, error) {
 	parsed, _ := sudokuparser.ParseSudokuFromByteArray(bytes)
-	state := app.PuzzleState{}
+	state := app.NewPuzzleState()
 
 	if parsed == "" {
 		return state, errors.New("Unable to parse puzzle")

@@ -4,6 +4,15 @@ import "strconv"
 
 type PuzzleState [][]uint
 
+func NewPuzzleState() PuzzleState {
+	a := make([][]uint, 9)
+	for i := range a {
+		a[i] = make([]uint, 9)
+	}
+	puzz := PuzzleState(a)
+	return puzz
+}
+
 func (p PuzzleState) String() string {
 	var out string
 	for i := 0; i < len(p); i++ {
