@@ -3,8 +3,8 @@ package grabber
 import (
 	"errors"
 
-	"github.com/jamesandersen/go-sudoku/sudokuparser"
 	app "github.com/ryanbmilbourne/syr-sudoku-backend/pkg"
+	"github.com/ryanbmilbourne/syr-sudoku-backend/pkg/sudokuparser"
 )
 
 // GrabPuzzle parses a puzzle structure from a provided image
