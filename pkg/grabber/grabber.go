@@ -3,13 +3,14 @@ package grabber
 import (
 	"errors"
 
+	"github.com/Wrenky/sudoKu/solve"
 	app "github.com/ryanbmilbourne/syr-sudoku-backend/pkg"
 	"github.com/ryanbmilbourne/syr-sudoku-backend/pkg/sudokuparser"
 )
 
 // GrabPuzzle parses a puzzle structure from a provided image
-func GrabPuzzle(fileName string) (app.PuzzleState, error) {
-	parsed, _ := sudokuparser.ParseSudokuFromFile(fileName)
+func GrabPuzzle(bytes []byte) (app.PuzzleState, error) {
+	parsed, _ := sudokuparser.ParseSudokuFromByteArray(bytes)
 	state := app.PuzzleState{}
 
 	if parsed == "" {
@@ -31,9 +32,18 @@ func GrabPuzzle(fileName string) (app.PuzzleState, error) {
 		} else {
 			// The cast here takes the ASCII value of the rune, so subtract
 			// the value of ASCI 0 to get the true int value.
-			state[outerIdx][innerIdx] = uint8(val - '0')
+			state[outerIdx][innerIdx] = uint(val - '0')
 		}
 		innerIdx++
 	}
 	return state, nil
+}
+
+func SolvePuzzle(puzz app.PuzzleState) (app.PuzzleState, error) {
+	solution, err := solve.SolvePuzzle(puzz)
+	if err != nil {
+		return app.PuzzleState{}, err
+	}
+
+	return solution, nil
 }

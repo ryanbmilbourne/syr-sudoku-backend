@@ -50,3 +50,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/go-opencv/go-opencv"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/Wrenky/sudoKu"

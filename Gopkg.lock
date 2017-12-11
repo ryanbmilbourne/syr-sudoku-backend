@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/Wrenky/sudoKu"
+  packages = [".","solve"]
+  revision = "6bedba0004ed621050ea146c73b7e761e8ab7fc7"
+
+[[projects]]
+  branch = "master"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
   revision = "22d885f9ecc78bf4ee5d72b937e4bbcdc58e8cae"
@@ -12,12 +18,6 @@
   name = "github.com/gin-gonic/gin"
   packages = [".","binding","json","render"]
   revision = "9e895470ddd40a45f28dbe4e96bfb5e893d54f9e"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/go-opencv/go-opencv"
-  packages = ["opencv"]
-  revision = "fb0a687051c795176e0698f358231f2ab1585bcb"
 
 [[projects]]
   branch = "master"
@@ -88,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d55300e6af529a938e4b8d96e8be48370b0f0d2483d643bbbbcabd94c5497393"
+  inputs-digest = "a040bb9d2c18ddcf74938e2f7b8ebdc96f8013b32580222292ea4ce1f2de68b1"
   solver-name = "gps-cdcl"
   solver-version = 1

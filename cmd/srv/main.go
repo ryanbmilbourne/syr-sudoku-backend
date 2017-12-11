@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
+	"io"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -44,14 +46,25 @@ func CreatePuzzle(c *gin.Context) {
 		})
 		return
 	}
-	file.Filename = "/tmp/suduuku/" + puzzle.UserID + "_" + time.Now().Format(time.RFC3339)
-	c.SaveUploadedFile(file, file.Filename)
-	log.WithFields(log.Fields{
-		"Filename": file.Filename,
-	}).Info("Rx file upload")
+	src, err := file.Open()
+	defer src.Close()
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "Could not load image: " + err.Error(),
+		})
+		return
+	}
+
+	// TODO: Do file header verification checks
+
+	// Get dem Bytes
+	var Buf bytes.Buffer
+	var bytes []byte
+	io.Copy(&Buf, src)
+	bytes = Buf.Bytes()
 
 	startParseTime := time.Now()
-	puzzState, err := grabber.GrabPuzzle(file.Filename)
+	puzzState, err := grabber.GrabPuzzle(bytes)
 	totalParseTime := time.Since(startParseTime)
 	log.WithFields(log.Fields{
 		"timeElapsed": totalParseTime,
@@ -67,7 +80,25 @@ func CreatePuzzle(c *gin.Context) {
 
 	fmt.Printf(puzzState.String())
 
-	c.JSON(201, puzzState)
+	// Solve that shit
+	startSolveTime := time.Now()
+	puzzSolution, err := grabber.SolvePuzzle(puzzState)
+	totalSolveTime := time.Since(startSolveTime)
+	log.WithFields(log.Fields{
+		"timeElapsed": totalSolveTime,
+	}).Info("Attmpted to solve puzzle")
+
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "Could not solve puzzle: " + err.Error(),
+		})
+		log.WithError(err)
+		return
+	}
+	log.Info("Solved puzzle")
+	fmt.Printf(puzzSolution.String())
+
+	c.JSON(201, puzzSolution)
 }
 
 func main() {

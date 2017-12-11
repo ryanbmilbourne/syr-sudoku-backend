@@ -6,6 +6,7 @@ COPY . .
 
 RUN go get github.com/gin-gonic/gin
 RUN go get github.com/sirupsen/logrus
+RUN go get github.com/Wrenky/sudoKu
 
 #RUN go-wrapper download   # "go get -d -v ./..."
 #RUN go-wrapper install    # "go install -v ./..."

@@ -2,9 +2,9 @@ package syrSudokuBackend
 
 import "strconv"
 
-type PuzzleState [9][9]uint8
+type PuzzleState [][]uint
 
-func (p *PuzzleState) String() string {
+func (p PuzzleState) String() string {
 	var out string
 	for i := 0; i < len(p); i++ {
 		if i == 3 || i == 6 {
