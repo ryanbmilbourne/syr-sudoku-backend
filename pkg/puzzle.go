@@ -33,7 +33,8 @@ func (p PuzzleState) String() string {
 type Puzzle struct {
 	UUID     string      `json:"puzzleId"`
 	UserID   string      `json:"userId"`
-	Solution PuzzleState `json:"solution,omitempty"`
+	State    PuzzleState `json:"state"`
+	Solution PuzzleState `json:"solution"`
 }
 
 type PuzzleService interface {

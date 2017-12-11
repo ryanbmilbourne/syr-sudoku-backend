@@ -69,6 +69,7 @@ func CreatePuzzle(c *gin.Context) {
 	log.WithFields(log.Fields{
 		"timeElapsed": totalParseTime,
 	}).Info("Parsed puzzle")
+	puzzle.State = puzzState
 
 	if err != nil {
 		c.JSON(500, gin.H{
@@ -87,6 +88,7 @@ func CreatePuzzle(c *gin.Context) {
 	log.WithFields(log.Fields{
 		"timeElapsed": totalSolveTime,
 	}).Info("Attmpted to solve puzzle")
+	fmt.Printf(puzzSolution.String())
 
 	if err != nil {
 		c.JSON(500, gin.H{
@@ -96,9 +98,12 @@ func CreatePuzzle(c *gin.Context) {
 		return
 	}
 	log.Info("Solved puzzle")
-	fmt.Printf(puzzSolution.String())
 
-	c.JSON(201, puzzSolution)
+	puzzle.Solution = puzzSolution
+
+	// TODO: Save to Database
+
+	c.JSON(201, puzzle)
 }
 
 func main() {
