@@ -100,10 +100,41 @@ func CreatePuzzle(c *gin.Context) {
 	log.Info("Solved puzzle")
 
 	puzzle.Solution = puzzSolution
+	fmt.Printf(puzzSolution.String())
 
 	// TODO: Save to Database
 
 	c.JSON(201, puzzle)
+}
+
+func GetPuzzleHint(c *gin.Context) {
+	var puzz app.Puzzle
+
+	c.BindJSON(&puzz)
+
+	fmt.Printf(puzz.State.String())
+
+	startHintTime := time.Now()
+	hintState, hintRow, hintCol, err := grabber.HintPuzzle(puzz.State)
+	totalHintTime := time.Since(startHintTime)
+	log.WithFields(log.Fields{
+		"timeElapsed": totalHintTime,
+	}).Info("Attmpted to fetch puzzle hint")
+
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "Could not fetch hint: " + err.Error(),
+		})
+		return
+	}
+	log.Info("fetched hint")
+
+	fmt.Println(hintState.String())
+
+	c.JSON(200, gin.H{
+		"state":      hintState,
+		"hintCoords": [2]uint{hintRow, hintCol},
+	})
 }
 
 func main() {
@@ -131,6 +162,7 @@ func main() {
 		})
 	})
 	r.GET("/puzzles", GetPuzzle)
+	r.POST("/puzzles/hints", GetPuzzleHint)
 	r.POST("/puzzles", CreatePuzzle)
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

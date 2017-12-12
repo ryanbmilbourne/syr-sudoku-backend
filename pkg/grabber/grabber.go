@@ -47,3 +47,12 @@ func SolvePuzzle(puzz app.PuzzleState) (app.PuzzleState, error) {
 
 	return solution, nil
 }
+
+func HintPuzzle(puzz app.PuzzleState) (app.PuzzleState, uint, uint, error) {
+	hintState, hintRow, hintCol, err := solve.Hint(puzz)
+	if err != nil {
+		return app.PuzzleState{}, 0, 0, err
+	}
+
+	return hintState, hintRow, hintCol, nil
+}
