@@ -83,7 +83,7 @@ func CreatePuzzle(c *gin.Context) {
 
 	// Solve that shit
 	startSolveTime := time.Now()
-	puzzSolution, err := grabber.SolvePuzzle(puzzState)
+	puzzSolution, err, errCoords := grabber.SolvePuzzle(puzzState)
 	totalSolveTime := time.Since(startSolveTime)
 	log.WithFields(log.Fields{
 		"timeElapsed": totalSolveTime,
@@ -92,8 +92,9 @@ func CreatePuzzle(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(500, gin.H{
-			"error": "Could not solve puzzle: " + err.Error(),
-			"state": puzzState,
+			"error":       "Could not solve puzzle: " + err.Error(),
+			"state":       puzzState,
+			"errorCoords": errCoords,
 		})
 		log.WithError(err)
 		return
@@ -115,7 +116,7 @@ func GetPuzzleHint(c *gin.Context) {
 	fmt.Printf(puzz.State.String())
 
 	startHintTime := time.Now()
-	hintState, hintRow, hintCol, err := grabber.HintPuzzle(puzz.State)
+	hintState, hintRow, hintCol, err, errCoords := grabber.HintPuzzle(puzz.State)
 	totalHintTime := time.Since(startHintTime)
 	log.WithFields(log.Fields{
 		"timeElapsed": totalHintTime,
@@ -123,7 +124,8 @@ func GetPuzzleHint(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(500, gin.H{
-			"error": "Could not fetch hint: " + err.Error(),
+			"error":       "Could not fetch hint: " + err.Error(),
+			"errorCoords": errCoords,
 		})
 		return
 	}

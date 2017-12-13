@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/Wrenky/sudoKu"
   packages = ["solve"]
-  revision = "74d807023bd9250de8aab8e02a35f108db092fd9"
+  revision = "74392ae56eddb8fdc59fe5d7c26932e07a18c29d"
 
 [[projects]]
   branch = "master"
@@ -59,7 +59,7 @@
   branch = "master"
   name = "github.com/ugorji/go"
   packages = ["codec"]
-  revision = "f57d8945648dbfe4c332cff9c50fb57548958e3f"
+  revision = "d36cb94d7a666b4c1c199e3f428e61ad4ff5511a"
 
 [[projects]]
   branch = "master"

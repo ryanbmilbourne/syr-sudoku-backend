@@ -39,20 +39,22 @@ func GrabPuzzle(bytes []byte) (app.PuzzleState, error) {
 	return state, nil
 }
 
-func SolvePuzzle(puzz app.PuzzleState) (app.PuzzleState, error) {
+func SolvePuzzle(puzz app.PuzzleState) (app.PuzzleState, error, [2]uint) {
 	solution, err := solve.SolvePuzzle(puzz)
 	if err != nil {
-		return app.PuzzleState{}, err
+		perr, _ := err.(*solve.PuzzleError)
+		return app.PuzzleState{}, err, [2]uint{perr.Row, perr.Col}
 	}
 
-	return solution, nil
+	return solution, nil, [2]uint{}
 }
 
-func HintPuzzle(puzz app.PuzzleState) (app.PuzzleState, uint, uint, error) {
+func HintPuzzle(puzz app.PuzzleState) (app.PuzzleState, uint, uint, error, [2]uint) {
 	hintState, hintRow, hintCol, err := solve.Hint(puzz)
 	if err != nil {
-		return app.PuzzleState{}, 0, 0, err
+		perr, _ := err.(*solve.PuzzleError)
+		return app.PuzzleState{}, 0, 0, err, [2]uint{perr.Row, perr.Col}
 	}
 
-	return hintState, hintRow, hintCol, nil
+	return hintState, hintRow, hintCol, nil, [2]uint{}
 }
