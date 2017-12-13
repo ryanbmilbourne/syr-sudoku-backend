@@ -93,6 +93,7 @@ func CreatePuzzle(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{
 			"error": "Could not solve puzzle: " + err.Error(),
+			"state": puzzState,
 		})
 		log.WithError(err)
 		return
@@ -100,7 +101,6 @@ func CreatePuzzle(c *gin.Context) {
 	log.Info("Solved puzzle")
 
 	puzzle.Solution = puzzSolution
-	fmt.Printf(puzzSolution.String())
 
 	// TODO: Save to Database
 
