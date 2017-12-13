@@ -72,8 +72,8 @@ func CreatePuzzle(c *gin.Context) {
 	puzzle.State = puzzState
 
 	if err != nil {
-		c.JSON(500, gin.H{
-			"error": "Could not preprocess image: " + err.Error(),
+		c.JSON(400, gin.H{
+			"error": "Could not process image from given photo: " + err.Error(),
 		})
 		log.WithError(err)
 		return

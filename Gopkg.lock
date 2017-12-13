@@ -4,8 +4,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/Wrenky/sudoKu"
-  packages = [".","solve"]
-  revision = "6bedba0004ed621050ea146c73b7e761e8ab7fc7"
+  packages = ["solve"]
+  revision = "74d807023bd9250de8aab8e02a35f108db092fd9"
 
 [[projects]]
   branch = "master"
@@ -52,14 +52,14 @@
 [[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
-  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
-  version = "v1.0.3"
+  revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
+  version = "v1.0.4"
 
 [[projects]]
   branch = "master"
   name = "github.com/ugorji/go"
   packages = ["codec"]
-  revision = "7a1de86227c3a2d8c266c99436d6cf6685d0dc53"
+  revision = "f57d8945648dbfe4c332cff9c50fb57548958e3f"
 
 [[projects]]
   branch = "master"
@@ -71,7 +71,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "8b4580aae2a0dd0c231a45d3ccb8434ff533b840"
+  revision = "53aa286056ef226755cd898109dbcdaba8ac0b81"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -88,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a040bb9d2c18ddcf74938e2f7b8ebdc96f8013b32580222292ea4ce1f2de68b1"
+  inputs-digest = "4a44d945f5e4f892d6d5c14e650514f26ae9d088150b3d52373005ebcd0e2503"
   solver-name = "gps-cdcl"
   solver-version = 1
