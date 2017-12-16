@@ -81,7 +81,7 @@ func CreatePuzzle(c *gin.Context) {
 
 	fmt.Printf(puzzState.String())
 
-	// Solve that shit
+	// Now that it is parsed, solve the puzzle.
 	startSolveTime := time.Now()
 	puzzSolution, err, errCoords := grabber.SolvePuzzle(puzzState)
 	totalSolveTime := time.Since(startSolveTime)
